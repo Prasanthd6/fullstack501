@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>All Sessions</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* General Body Styling */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Warm gradient */
+    }
+
+    /* Header Styling */
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 20px 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: bold;
+    }
+
+    header p {
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+    header a {
+      font-size: 1rem;
+      color: #ecf0f1;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    header a:hover {
+      color: #3498db;
+    }
+
+    /* Container for Dashboard */
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .dashboard-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-container h2 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: grid;
+      gap: 20px;
+    }
+
+    form input,
+    form select {
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      width: 100%;
+      transition: border-color 0.3s;
+    }
+
+    form input:focus,
+    form select:focus {
+      border-color: #3498db;
+    }
+
+    form button {
+      background-color: #3498db;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    form button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Sessions List Styling */
+    ul {
+      padding: 0;
+      margin-top: 30px;
+      list-style-type: none;
+    }
+
+    ul li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f1f1;
+      padding: 20px;
+    }
+
+    ul li h3 {
+      font-size: 1.5rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    ul li p {
+      font-size: 1rem;
+      color: #555;
+    }
+
+    ul li .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    ul li button {
+      padding: 8px 15px;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    ul li .edit-btn {
+      background-color: #3498db;
+      color: white;
+    }
+
+    ul li .edit-btn:hover {
+      background-color: #2980b9;
+    }
+
+    ul li .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    ul li .delete-btn:hover {
+      background-color: #c0392b;
+    }
+
+    /* Edit Form Styling */
+    .edit-session-form {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .edit-session-form input {
+      margin-bottom: 15px;
+    }
+
+    .edit-session-form button {
+      width: 100%;
+      background-color: #3498db;
+      color: white;
+      font-size: 1.1rem;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .edit-session-form button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Media Query for Smaller Screens */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+
+      header .container {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .dashboard-container {
+        padding: 20px;
+      }
+
+      ul li {
+        flex-direction: column;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .actions {
+        flex-direction: column;
+        margin-top: 10px;
+      }
+
+      .edit-session-form {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+  <header>
+    <div class="container">
+      <h1>All Sessions</h1>
+      <p>Welcome, <%= user.name %></p>
+      <a href="/logout">Logout</a>
+    </div>
+  </header>
+  
+  <div class="container">
+    <section class="dashboard-container">
+      <h2>Create Session</h2>
+      <form action="/create-session" method="POST">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="sport_id">Sport:</label>
+            <select name="sport_id" id="sport_id" required>
+              <% sports.forEach(sport => { %>
+                <option value="<%= sport.id %>"><%= sport.name %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div>
+            <label for="team1">Team 1:</label>
+            <input type="text" name="team1" id="team1" required />
+          </div>
+          <div>
+            <label for="team2">Team 2:</label>
+            <input type="text" name="team2" id="team2" required />
+          </div>
+          <div>
+            <label for="date">Date:</label>
+            <input type="date" name="date" id="date" required />
+          </div>
+          <div>
+            <label for="venue">Venue:</label>
+            <input type="text" name="venue" id="venue" required />
+          </div>
+        </div>
+        <button type="submit">Create Session</button>
+      </form>
+    </section>
+
+    <section class="dashboard-container">
+      <h2>All Sessions</h2>
+      <ul>
+        <% sessions.forEach(session => { %>
+          <li>
+            <div>
+              <h3><%= session.sport_name %></h3>
+              <p>Teams: <%= session.team1 %> vs <%= session.team2 %></p>
+              <p>Date: <%= session.date %></p>
+              <p>Venue: <%= session.venue %></p>
+              <p>Created by: <%= session.creator_name %></p>
+            </div>
+            <div class="actions">
+              <button class="edit-btn" onclick="toggleEditForm('<%= session.id %>')">Edit</button>
+              <form action="/delete-session/<%= session.id %>" method="POST">
+                <button type="submit" class="delete-btn">Delete</button>
+              </form>
+            </div>
+            <form id="edit-form-<%= session.id %>" class="edit-session-form" action="/edit-session/<%= session.id %>" method="POST">
+              <label for="team1">Team 1:</label>
+              <input type="text" name="team1" id="team1" value="<%= session.team1 %>" required />
+              <label for="team2">Team 2:</label>
+              <input type="text" name="team2" id="team2" value="<%= session.team2 %>" required />
+              <label for="date">Date:</label>
+              <input type="date" name="date" id="date" value="<%= session.date %>" required />
+              <label for="venue">Venue:</label>
+              <input type="text" name="venue" id="venue" value="<%= session.venue %>" required />
+              <button type="submit">Save Changes</button>
+            </form>
+          </li>
+        <% }) %>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    function toggleEditForm(sessionId) {
+      const form = document.getElementById(`edit-form-${sessionId}`);
+      form.classList.toggle('hidden');
+    }
+  </script>
+</body>
+
+</html>
